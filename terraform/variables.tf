@@ -57,6 +57,9 @@ variable "eks_managed_node_groups" {
       max_size       = 3
       min_size       = 1
       instance_types = ["t3.medium"]
+      iam_role_additional_policies = {
+        AmazonEBSCSIDriverPolicy = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
+      }
     }
   }
 }
