@@ -9,6 +9,8 @@ locals {
       [for az in range(var.azs_count) : var.public_subnets_newbits]
     )...
   )
+  private_subnets = slice(local.subnets, 0, var.azs_count)
+  public_subnets  = slice(local.subnets, var.azs_count, var.azs_count * 2)
 }
 
 module "network" {
@@ -20,8 +22,8 @@ module "network" {
   cidr                 = var.vpc_cidr
   enable_dns_hostnames = var.enable_dns_hostnames
   enable_nat_gateway   = var.enable_nat_gateway
-  private_subnets      = slice(local.subnets, 0, var.azs_count)
-  public_subnets       = slice(local.subnets, var.azs_count, var.azs_count * 2)
+  private_subnets      = local.private_subnets
+  public_subnets       = local.public_subnets
   private_subnet_tags = {
     "kubernetes.io/role/internal-elb" = "1"
   }
